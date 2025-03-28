@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Name That NZ City!</title>
+  <meta charset="utf-8" />
+  <style>
+    #map { height: 500px; margin-bottom: 10px; }
+    body { font-family: Arial, sans-serif; text-align: center; }
+    input, button { padding: 10px; font-size: 16px; margin: 5px; }
+    #result { font-weight: bold; margin-top: 10px; }
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+  <h2>Name That NZ City!</h2>
+  <div id="map"></div>
+  <input type="text" id="guess" placeholder="Type the city name">
+  <button onclick="checkAnswer()">Submit</button>
+  <p id="result"></p>
+
+  <script>
+    const cities = [
+      { name: "Auckland", lat: -36.8485, lng: 174.7633 },
+      { name: "Wellington", lat: -41.2865, lng: 174.7762 },
+      { name: "Christchurch", lat: -43.5320, lng: 172.6362 },
+      { name: "Dunedin", lat: -45.8788, lng: 170.5028 },
+      { name: "Hamilton", lat: -37.7833, lng: 175.2833 },
+      { name: "Tauranga", lat: -37.6878, lng: 176.1651 },
+      { name: "Napier", lat: -39.4928, lng: 176.9120 },
+      { name: "Rotorua", lat: -38.1368, lng: 176.2497 },
+      { name: "Palmerston North", lat: -40.3523, lng: 175.6090 },
+      { name: "Nelson", lat: -41.2706, lng: 173.2840 },
+      { name: "Invercargill", lat: -46.4132, lng: 168.3538 },
+      { name: "Whangarei", lat: -35.7251, lng: 174.3237 },
+      { name: "New Plymouth", lat: -39.0556, lng: 174.0752 },
+      { name: "Gisborne", lat: -38.6623, lng: 178.0176 },
+      { name: "Whanganui", lat: -39.9309, lng: 175.0506 },
+      { name: "Timaru", lat: -44.3966, lng: 171.2540 },
+      { name: "Blenheim", lat: -41.5134, lng: 173.9612 },
+      { name: "Taupo", lat: -38.6857, lng: 176.0702 },
+      { name: "Queenstown", lat: -45.0312, lng: 168.6626 },
+      { name: "Masterton", lat: -40.9597, lng: 175.6570 }
+    ];
+
+    const map = L.map('map').setView([-40.9006, 174.8860], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    const randomCity = cities[Math.floor(Math.random() * cities.length)];
+    const marker = L.marker([randomCity.lat, randomCity.lng]).addTo(map);
+
+    function checkAnswer() {
+      const guess = document.getElementById("guess").value.trim().toLowerCase();
+      const correct = randomCity.name.toLowerCase();
+      const result = document.getElementById("result");
+
+      if (guess === correct) {
+        result.textContent = "✅ Correct! Well done.";
+      } else {
+        result.textContent = `❌ Oops! It was ${randomCity.name}.`;
+        marker.bindPopup(randomCity.name).openPopup();
+      }
+    }
+  </script>
+</body>
+</html>
